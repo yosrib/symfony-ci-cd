@@ -15,7 +15,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY}}
 
       - name: Build the Docker image
-        run: docker build -t ${{ GCR_IMAGE }} .
+        run: docker build -t ${{ secrets.GCR_IMAGE }} .
 
       - name: Build the Docker image
-        run: docker push ${{ GCR_IMAGE }}
+        run: docker push ${{ secrets.GCR_IMAGE }}
