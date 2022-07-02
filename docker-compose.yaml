@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  php:
+    container_name: php
+    environment:
+      APP_ENV: dev
+      ENABLED_EXCEPTION_DEV: 0
+    build:
+      context: .
+    ports:
+      - '9000:9000'
