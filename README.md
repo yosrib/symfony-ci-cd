@@ -20,6 +20,10 @@ https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker
 # References
 ### SSH google compute engine
 https://github.com/google-github-actions/ssh-compute
+
+### Google auth
+https://github.com/google-github-actions/auth
+
 ### Build and push to GCR
 https://github.com/marketplace/actions/push-to-gcr-github-action
 https://medium.com/mistergreen-engineering/uploading-a-docker-image-to-gcr-using-github-actions-92e1cdf14811
