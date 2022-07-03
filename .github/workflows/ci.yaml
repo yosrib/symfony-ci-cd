@@ -40,7 +40,7 @@ jobs:
       #  run: gcloud auth configure-docker gcr.io -q
 
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.GCR_IMAGE }} .
+        run: docker build . -f Dockerfile -t ${{ secrets.GCR_IMAGE }}ß
 
       - name: Push the Docker image
         run: docker push ${{ secrets.GCR_IMAGE }}
