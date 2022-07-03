@@ -28,5 +28,8 @@ https://github.com/google-github-actions/auth
 https://github.com/marketplace/actions/push-to-gcr-github-action
 https://medium.com/mistergreen-engineering/uploading-a-docker-image-to-gcr-using-github-actions-92e1cdf14811
 
+### Create VM instances 
+https://cloud.google.com/compute/docs/containers/deploying-containers
+
 ### Jenkins installs as container
 https://www.jenkins.io/doc/book/installing/docker/
