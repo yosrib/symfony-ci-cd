@@ -32,7 +32,7 @@ jobs:
 
 
       - name: Configure docker authentication
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker gcr.io -q
 
       #- name: Build and push
       #  uses: docker/build-push-action@v3
