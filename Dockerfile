@@ -1,7 +1,7 @@
 
-ARG PHP_VERSION=8.1.5
+ARG PHP_VERSION=8.1.0
 
-FROM php:${PHP_VERSION}-fpm-alpine
+FROM php:${PHP_VERSION}-fpm
 
 RUN apk add --no-cache mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu
 

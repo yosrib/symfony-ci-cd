@@ -47,7 +47,7 @@ jobs:
       #  run: docker push ${{ secrets.GCR_IMAGE }}
 
       - name: Build docker image
-        run:  docker build . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/symfony-ci-cd:latest
+        run:  docker build . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/symfony-ci-cd
 
       - name: Push to Google Container Registry
-        run:  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/symfony-ci-cd:latest
+        run:  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/symfony-ci-cd
