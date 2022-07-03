@@ -34,7 +34,7 @@ jobs:
         uses: 'docker/login-action@v1'
         with:
           registry: 'gcr.io' # or REGION-docker.pkg.dev
-          username: 'symfony-ci-cd'
+          username: 'oauth2accesstoken'
           password: '${{ steps.auth.outputs.access_token }}'
       #- name: Configure docker authentication
       #  run: gcloud auth configure-docker gcr.io -q
