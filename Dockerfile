@@ -14,4 +14,4 @@ WORKDIR /var/www/symfony
 COPY symfony .
 
 # Set execution mod on App console binary
-RUN chmod +x /var/www/api/bin/console; sync
+RUN chmod +x /var/www/symfony/bin/console; sync
