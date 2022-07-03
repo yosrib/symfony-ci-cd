@@ -1,7 +1,5 @@
-name: Docker Image CI
-
-on: push
-
+# Workflow steps
+```yaml
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,3 +49,4 @@ jobs:
 
       - name: Push to Google Container Registry
         run:  docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/symfony-ci-cd
+```
