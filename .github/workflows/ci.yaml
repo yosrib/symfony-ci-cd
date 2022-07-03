@@ -22,7 +22,6 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           # service_account_email: ${{ secrets.GCP_SERVICE_ACCOUNT }}
           # service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          cleanup_credentials: true
 
       #- name: Setup Cloud SDK
       #  uses: 'google-github-actions/setup-gcloud@v0'
