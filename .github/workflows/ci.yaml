@@ -22,10 +22,10 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Configure docker authentication
-        run: gcloud auth configure-docker gcr.io
+        run: gcloud auth configure-docker -q
 
       - name: Build the Docker image
         run: docker build -t ${{ secrets.GCR_IMAGE }} .
 
-      - name: Build the Docker image
+      - name: Push the Docker image
         run: docker push ${{ secrets.GCR_IMAGE }}
