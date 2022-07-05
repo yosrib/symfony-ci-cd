@@ -46,7 +46,7 @@ jobs:
       - id: 'compute-ssh'
         uses: 'google-github-actions/ssh-compute@v0'
         with:
-          instance_name: 'symfony-ci-cd-vm'
+          instance_name: 'symfony-ci-cd-vm2'
           zone: 'us-central1-c'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
           command: 'echo Hello world'
