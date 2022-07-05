@@ -1,0 +1,27 @@
+#https://source.developers.google.com/p/gcp-devops-338510/r/repo-5
+
+steps:
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/yosrib/symfony-ci-cd']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build','-t',  'gcr.io/${_PROJECT_ID}/${_CINAME}:${_VERSION}', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','gcr.io/${_PROJECT_ID}/${_CINAME}:${_VERSION}']
+
+  # kubectl set image deployment/cicd-app-1 runimage-sha256-1=gcr.io/${_PROJECT_ID}/${_CINAME}:${_VERSION}
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args :
+      - 'set'
+      - 'image'
+      - 'deployment/symfony-ci-cd-gke' # deployment/WORKLOADS
+      - 'symfony-ci-cd-sha256-1=gcr.io/${_PROJECT_ID}/${_CINAME}:${_VERSION}' # KUBERNETES_CONTAINER_NAME=DOCKER_IMAGE_NAME
+    env :
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=symfony-ci-cd-gke-cluster' # CLUSTER_NAME
+
+substitutions:
+  _PROJECT_ID : gcp-devops-354514
+  _CINAME : symfony-ci-cd
+  _VERSION : latest
