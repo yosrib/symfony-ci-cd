@@ -1,7 +1,9 @@
 name: Docker Image CI
 
 on:
-  branch: google-auth
+  push:
+    branches:
+      - google-auth
 
 jobs:
   build:
