@@ -1,12 +1,26 @@
 version: '3.8'
 
 services:
+  nginx:
+    container_name: nginx-symfony-ci-cd
+    image: nginx:1.16-alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './symfony/public:/var/www/symfony/public:ro'
+      - './.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf'
+    depends_on:
+      - php
+
   php:
-    container_name: php
+    container_name: php-symfony-ci-cd
     environment:
       APP_ENV: dev
       ENABLED_EXCEPTION_DEV: 0
     build:
       context: .
+    volumes:
+      - './symfony:/var/www/symfony'
     ports:
       - '9000:9000'
