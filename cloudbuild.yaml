@@ -7,11 +7,11 @@ steps:
 
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build','-t',  'gcr.io/${_PROJECT_ID}/${_CI_NAME}:${_VERSION}', '.']
+    args: ['build', '-t', 'gcr.io/${_PROJECT_ID}/${_CI_NAME}:${_VERSION}', '.']
 
   - id: 'Push docker image to registry'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push','gcr.io/${_PROJECT_ID}/${_CI_NAME}:${_VERSION}']
+    args: ['push', 'gcr.io/${_PROJECT_ID}/${_CI_NAME}:${_VERSION}']
 
   # kubectl set image deployment/symfony-ci-cd-gke symfony-ci-cd-sha256-2=gcr.io/${_PROJECT_ID}/${_CI_NAME}:${_VERSION}
   - id: 'Deploy image with kubernetes'

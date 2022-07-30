@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-2
+  namespace: test
+spec:
+  containers:
+    - name: db
+      image: redis:alpine
+      resources:
+        limits:
+          memory: "1Gi"
+          cpu: "800m"
+        requests:
+          memory: "700Mi"
+          cpu: "400m"
