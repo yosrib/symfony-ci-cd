@@ -24,6 +24,16 @@ recuperer le fichier de conf (config)
 # Kubectl
 export KUBECONFIG=CONGIG_FILE_PATH
 
+## Show kubernetes api-resources
+$ kubectl api-resources
+
+## Show kubernetes api-versions
+$ kubectl api-versions
+
+# Explain
+$ kubectl explain <yaml.pattern.to.field>
+$ kubectl explain pod.spec.containers.command
+
 ## Installation
 https://gitlab.com/lucj/k8s-exercices/-/blob/master/Installation/kubectl.md
 https://github.com/ahmetb/kubectx
@@ -251,3 +261,14 @@ multipass delete -p node1 node2
 https://www.cncf.io/
 https://katacoda.com
 Metal LB => create load balancer for local https://metallb.universe.tf/
+https://github.com/stedolan/jq
+https://kubernetes.io/fr/docs/reference/kubectl/jsonpath/
+https://kubernetes.io/fr/docs/tasks/access-application-cluster/web-ui-dashboard/
+https://github.com/ahmetb/kubectl-aliases
+https://github.com/ahmetb/krew (create plugins)
+
+# Utils 
+
+## Auto completion 
+$ sudo apt-get install bash bash-completion
+$ source <(kubectl completion bash)
