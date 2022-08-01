@@ -197,7 +197,38 @@ kubectl get events -n test
 ### Get namespace limit range
 kubectl get limitrange LIMIT_RANGE_NAME -n test
 
+## ConfigMap
+
+## Create config map
+
+### conf file
+$ kubectl create configmap CONFIG_MAP_NAME --from-file=FILE_PATH
+$ kubectl create configmap nginx-config --from-file=./nginx.conf
+
+### env file
+$ kubectl create configmap CONFIG_MAP_NAME --from-env-file=FILE_PATH
+$ kubectl create configmap nginx-config --from-env-file=./.env.dist
+
+### without file
+$ kubectl create configmap CONFIG_MAP_NAME --from-literal=KEY=VALUE
+$ kubectl create configmap CONFIG_MAP_NAME --from-literal=log_level=WARM
+
+## Get config map
+$ kubectl get cm CONFIG_MAP_NAME -o yaml
+$ kubectl get cm nginx-config -o yaml
+
+## Edit config map
+$ kubectl edit cm/CONFIG_MAP_NAME
+$ kubectl create configmap CONFIG_MAP_NAME --from-file=CONF_PATH --dry-run=client -o yaml | kubectl apply -f -
+
+
+
 # Utils
+
+## Auto completion
+$ sudo apt-get install bash bash-completion
+$ source <(kubectl completion bash)
+
 ## Rancher 
 Solution de gestion des clusters
 
@@ -224,6 +255,7 @@ https://github.com/k3s-io/k3s
 
 ## k3d
 https://gitlab.com/lucj/k8s-exercices/-/blob/master/Installation/k3d.md
+
 
 # Multipass
 https://gitlab.com/lucj/k8s-exercices/-/blob/master/Installation/multipass.md
@@ -267,8 +299,8 @@ https://kubernetes.io/fr/docs/tasks/access-application-cluster/web-ui-dashboard/
 https://github.com/ahmetb/kubectl-aliases
 https://github.com/ahmetb/krew (create plugins)
 
-# Utils 
 
-## Auto completion 
-$ sudo apt-get install bash bash-completion
-$ source <(kubectl completion bash)
+kubelet ?
+ingress ?
+kubectl ?
+minikube ?
