@@ -221,7 +221,22 @@ $ kubectl get cm nginx-config -o yaml
 $ kubectl edit cm/CONFIG_MAP_NAME
 $ kubectl create configmap CONFIG_MAP_NAME --from-file=CONF_PATH --dry-run=client -o yaml | kubectl apply -f -
 
+## Secret
 
+### Create secrets
+$ kubectl create secret generic SECRET_NAME --from-file=FILE1 --from-file=FILE2
+$ kubectl create secret generic SECRET_NAME --from-literal=KEY_NAME=KEY_VALUE
+$ kubectl create -f SECRET_YAML_PATH
+
+$ kubectl create secret docker-registry SECRET_NAME \
+  --docker-server=SERVER --docker-username=USER --docker-password=PWD --docker-email=EMAIL
+
+### Get secrets
+$ kubectl get secrets
+$ kubectl get secrets SECRET_NAME -o yaml
+
+### Describe secrets
+$ kubectl describe secrets/SECRET_NAME
 
 # Utils
 
