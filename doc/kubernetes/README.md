@@ -304,3 +304,4 @@ kubelet ?
 ingress ?
 kubectl ?
 minikube ?
+manifest ?
