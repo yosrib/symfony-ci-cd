@@ -243,6 +243,15 @@ $ kubectl describe secret/SECRET_NAME
 ### Get service accounts
 $ kubectl get sa
 
+# Dashboard 
+
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+$ kubectl proxy
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+After creation of ServiceAccount and ClusterRoleBinding
+$ echo $(kubectl -n kube-system get secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') -o jsonpath='{.data.token}') | base64 --decode
+Use the token to login to dashboard
 # Utils
 
 ## Kubernetes Server API
