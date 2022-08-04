@@ -233,12 +233,20 @@ $ kubectl create secret docker-registry SECRET_NAME \
 
 ### Get secrets
 $ kubectl get secrets
-$ kubectl get secrets SECRET_NAME -o yaml
+$ kubectl get secret SECRET_NAME -o yaml
 
 ### Describe secrets
-$ kubectl describe secrets/SECRET_NAME
+$ kubectl describe secret/SECRET_NAME
+
+## ServiceAccount
+
+### Get service accounts
+$ kubectl get sa
 
 # Utils
+
+## Kubernetes Server API
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/
 
 ## Auto completion
 $ sudo apt-get install bash bash-completion
