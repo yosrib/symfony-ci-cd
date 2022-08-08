@@ -92,6 +92,7 @@ kubectl get node/NODE_NAME -o yaml
 ## Services
 ### ClusterIp
 Expose pods in internal
+kubectl expose pod POD_NAME --type=ClusterIP --port=PORT --target-port=TARGET_PORT
 
 ### NodePort
 Expose pods in external (port number between 30 000 and 32 767)
@@ -242,6 +243,31 @@ $ kubectl describe secret/SECRET_NAME
 
 ### Get service accounts
 $ kubectl get sa
+
+## DaemonSet
+### get daemon set
+$ kubectl get ds
+
+## Job
+### Get jobs
+$ kubectl get jobs
+
+### Get job logs
+$ kubectl logs POD_NAME
+
+### Delete job
+$ kubectl delete job JOB_NAME
+
+## CronJob
+### Get cron jobs
+$ kubectl get cj
+
+### Delete cron job
+$ kubectl delete cj CRON_JOB_NAME
+
+## Ingress
+### Install Nginx ingress controller
+https://kubernetes.github.io/ingress-nginx/deploy/
 
 # Dashboard 
 

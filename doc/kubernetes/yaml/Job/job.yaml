@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alpine-job
+spec:
+  completions: 3 # number of pods
+  parallelism: 1 # number on parallel jobs
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: hello
+          image: alpine
+          args:
+            - /bin/sh
+            - -c
+            - sleep 10; echo hello from kube Job; date

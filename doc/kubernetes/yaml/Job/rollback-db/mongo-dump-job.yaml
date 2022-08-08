@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-dump-job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        app: dump
+      containers:
+        - name: mongo-dump-job
+          image: mongo:4.0
+          volumeMounts:
+            - name: dump
+              mountPath: /data/dump
+          command:
+            - /bin/bash
+            - -c
+            - mongodump --gzip --host db --archive=/data/dump/db.gz
+      volumes:
+        - name: dump
+          emptyDir: {}

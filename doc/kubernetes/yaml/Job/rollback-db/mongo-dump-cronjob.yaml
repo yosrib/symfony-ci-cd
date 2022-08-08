@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mongo-dump-cron-job
+spec:
+  schedule: "*/1 * * * *" # every minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            app: dump
+          containers:
+            - name: mongo-dump-job
+              image: mongo:4.0
+              volumeMounts:
+                - name: dump
+                  mountPath: /data/dump
+              command:
+                - /bin/bash
+                - -c
+                - mongodump --gzip --host db --archive=/data/dump/$(date +"%Y%m%dT%H%M%S")-db.gz
+          volumes:
+            - name: dump
+              emptyDir: { }
