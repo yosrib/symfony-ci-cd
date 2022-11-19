@@ -1,0 +1,15 @@
+# Service de type Headless
+# sera utilisé pour donner une identité réseau stable à chaque Pods qui sera créé par le StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+  clusterIP: None
+  selector:
+    app: mysql

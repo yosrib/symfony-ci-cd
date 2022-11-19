@@ -269,6 +269,160 @@ $ kubectl delete cj CRON_JOB_NAME
 ### Install Nginx ingress controller
 https://kubernetes.github.io/ingress-nginx/deploy/
 
+# Operator
+
+https://github.com/operator-framework/awesome-operators
+### CoreOs (GO)
+https://github.com/operator-framework/operator-sdk
+
+### ZalandoTech (Python)
+https://github.com/zalando-incubator/kopf
+https://kopf.readthedocs.io/en/stable/install/
+
+# Volumes
+## EmptyDir
+Volume lié au pod
+
+## HostPath
+Montage d'une ressource de la machine hote dans un pod
+
+## PersistentVolume
+
+### Create a persistent volume
+kubectl apply -f PERSISTENT_VOLUME.yaml
+
+### Show persistent volumes
+kubectl get pv
+
+## PersistentVolumeClaim
+
+### Create a persistent volume
+kubectl apply -f PERSISTENT_VOLUME_CLAIM.yaml
+
+### Show persistent volumes
+kubectl get pvc
+
+### StorageClass
+kubectl get sc
+
+https://gitlab.com/lucj/k8s-exercices/-/blob/master/Application-Stateful/longhorn.md
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/deploy/longhorn.yaml
+
+# StatefulSet
+Creation d'un cluster
+
+Visualize pod creation
+$ kubectl get pods -l app=mysql --watch
+
+Scaling
+$ kubectl scale --replicas=4 statefulset/mysql
+
+## ServiceMesh
+Proxy a cote du pod qui intercepte toutes les requetes entantes et sortantes
+Ca permet de mettre en place des regles de routages, de controle d'acces...
+exp : Istio, Linkerd
+
+### Linkerd 
+#### Download linkerd binary
+$ curl -sL run.linkerd.io/install | sh
+$ export PATH=$PATH:$HOME/.linkerd2/bin
+
+#### Check version
+$ linkerd version
+
+#### Check if linkerd is ready to be installed into the cluster
+$ linkerd check --pre
+
+#### Install in cluster
+$ linkerd install --crds | kubectl apply -f -
+$ linkerd install | kubectl apply -f -
+$ linkerd check
+
+#### Dashboard install
+$ linkerd viz install | kubectl apply -f -
+
+#### Dashboard access
+$ linkerd viz dashboard &
+
+#### Deploy vote application
+$ curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
+$ kubectl get -n emojivoto deploy -o yaml \
+| linkerd inject - \
+| kubectl apply -f -
+$ linkerd -n emojivoto check --proxy
+
+Delete application
+$ curl -sL https://run.linkerd.io/emojivoto.yml \
+| kubectl -n emojivoto delete -f -
+
+#### Deploy books application
+$ kubectl create ns booksapp
+$ curl -sL https://run.linkerd.io/booksapp.yml | kubectl -n booksapp apply -f -
+$ kubectl get -n booksapp deploy -o yaml \
+| linkerd inject - \
+| kubectl apply -f -
+$ linkerd -n booksapp check --proxy
+
+##### ServiceProfile
+$ curl -sL https://run.linkerd.io/booksapp/webapp.swagger \
+| linkerd -n booksapp profile --open-api - webapp \
+| kubectl -n booksapp apply -f -
+
+$ curl -sL https://run.linkerd.io/booksapp/authors.swagger \
+| linkerd -n booksapp profile --open-api - authors \
+| kubectl -n booksapp apply -f -
+
+$ curl -sL https://run.linkerd.io/booksapp/books.swagger \
+| linkerd -n booksapp profile --open-api - books \
+| kubectl -n booksapp apply -f -
+
+Visualize profiling in console
+$ linkerd viz -n booksapp routes deploy/webapp
+$ linkerd viz -n booksapp routes svc/webapp
+$ linkerd viz -n booksapp routes deploy/webapp --to svc/books
+
+###### Edit ServiceProfile
+$ kubectl -n booksapp edit sp/authors.booksapp.svc.cluster.local
+
+Add isRetryable: true in HEAD condition
+- condition:
+    method: HEAD
+    pathRegex: /authors/[^/]*\.json
+  isRetryable: true  # Added line
+  name: HEAD /authors/{id}.json
+
+$ kubectl -n booksapp edit sp/books.booksapp.svc.cluster.local
+
+Add time out in PUT condition
+- condition:
+    method: PUT
+    pathRegex: /books/[^/]*\.json
+  name: PUT /books/{id}.json
+  timeout: 25ms # Added line
+
+Delete booksapp
+$ curl -sL https://run.linkerd.io/booksapp.yml \
+| kubectl -n booksapp delete -f - \
+&& kubectl delete ns booksapp
+
+
+# Helm
+
+## Installation
+$ brew install helm
+$ helm version
+$ helm repo add stable https://charts.helm.sh/stable
+
+## Install chart
+$ helm install NAME REPOSITORY
+$ helm install nginx stable/nginx-ingress
+
+## List charts
+$ helm list
+
+## Delete
+$ helm delete nginx
+
 # Dashboard 
 
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml

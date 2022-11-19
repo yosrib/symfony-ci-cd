@@ -1,0 +1,14 @@
+# Service type ClusterIP
+# permettra de faire du load balancing entre les Pods de type slaves
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-read
+  labels:
+    app: mysql
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+  selector:
+    app: mysql

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongo
+spec:
+  containers:
+    - image: mongo:4.0
+      name: mongo
+      volumeMounts:
+        - mountPath: /data/db # container dir path
+          name: data
+  volumes:
+    - name: data
+      hostPath:
+        path: /data-db # machine dir path

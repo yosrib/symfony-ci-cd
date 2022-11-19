@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: op
+spec:
+  selector:
+    matchLabels:
+      app: op
+  template:
+    metadata:
+      labels:
+        app: op
+    spec:
+      serviceAccountName: db-operator
+      containers:
+        - image: gcr.io/gcp-devops-354514/kube-operator-db:latest
+          name: op

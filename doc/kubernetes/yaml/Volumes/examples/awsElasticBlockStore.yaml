@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongo
+spec:
+  containers:
+    - image: mongo:4.0
+      name: mongo
+      volumeMounts:
+        - mountPath: /data/db # container dir path
+          name: data
+  volumes:
+    - name: data
+      awsElasticBlockStore:
+        volumeID: EXISTING_VOLUME_ID # $ aws ec2 create-volume --availability-zone=eu-west-1a --size=10 --volume-type=gp2
+        fsType: ext4
