@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-nginx
+  labels:
+    app: php-nginx
+spec:
+  selector:
+    matchLabels:
+      app: php-nginx
+  template:
+    metadata:
+      labels:
+        app: php-nginx
+    spec:
+      containers:
+        - name: php
+          image: php:8.1-fpm-alpine
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "wget -O /var/www/html/index.php https://raw.githubusercontent.com/do-community/php-kubernetes/master/index.php"]
+          volumeMounts:
+            - name: shared
+              mountPath: /var/www/html
+        - name: nginx
+          image: nginx:1.23
+          volumeMounts:
+            - name: shared
+              mountPath: /var/www/html
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+      volumes:
+        - name: shared
+          emptyDir: {}
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
