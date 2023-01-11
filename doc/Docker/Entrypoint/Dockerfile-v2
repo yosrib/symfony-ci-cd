@@ -1,0 +1,3 @@
+FROM alpine
+# docker run IMAGE ping -c3 8.8.8.8
+CMD ["ping"]

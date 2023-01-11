@@ -1,0 +1,5 @@
+FROM alpine
+# docker run IMAGE ping -c3 8.8.8.8
+ENTRYPOINT ["ping"]
+# entrypoint params (can be overrided)
+CMD ["-c3", "localhost"]

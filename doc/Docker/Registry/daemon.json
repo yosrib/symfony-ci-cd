@@ -1,0 +1,3 @@
+{
+  "insecure-registries" : ["registry.mydom.com:5000"]
+}

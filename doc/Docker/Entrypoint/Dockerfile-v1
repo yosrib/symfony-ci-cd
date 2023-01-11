@@ -1,0 +1,3 @@
+FROM alpine
+# docker run IMAGE -c3 8.8.8.8
+ENTRYPOINT ["ping"]
