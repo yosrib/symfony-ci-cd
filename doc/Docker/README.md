@@ -185,3 +185,10 @@ $ docker plugin install vieux/sshfs
 Create volume via ssh with the driver vieux/sshfs (not recommended to use this plugin in prod)
 $ ssh USER@HOST mkdir /tmp/data
 $ docker volume create -d vieux/sshfs -o sshcmd=USER@HOST:/tmp/data -o password=PASSWORD VOLUME_NAME
+
+# Docker compose
+## VotingApp
+https://gitlab.com/voting-application
+
+## Scale
+$ docker compose up -d --scale SERVICE_NAME=2

@@ -1,0 +1,20 @@
+services:
+  logstash:
+    image: logstash:7.14.2
+    environment:
+      discovery.seed_hosts: logstash
+      LS_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - ./logstash.conf:/config/logstash.conf
+    command: ["logstash", "-f", "/config/logstash.conf"]
+    ports:
+      - 8080:8080
+  elasticsearch:
+    image: elasticsearch:7.14.2
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  kibana:
+    image: kibana:7.14.2
+    ports:
+      - 5601:5601
