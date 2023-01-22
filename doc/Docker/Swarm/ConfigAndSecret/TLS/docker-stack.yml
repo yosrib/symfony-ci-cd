@@ -1,0 +1,33 @@
+# add city.com in /etc/hosts
+# $ docker stack deploy -c docker-stack.yml app
+version: '3.3'
+services:
+  proxy:
+    image: nginx:1.16
+    configs:
+      - source: server_config
+        target: /etc/nginx/nginx.conf
+      - source: server_cert
+        target: /etc/ssl/certs/server.crt
+    secrets:
+      - source: server_key
+        target: /etc/ssl/certs/server.key
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      restart_policy:
+        condition: on-failure
+  api:
+    image: lucj/city:1.0
+    deploy:
+      restart_policy:
+        condition: on-failure
+configs:
+  server_config:
+    file: ./nginx.conf
+  server_cert:
+    file: ./server-cert.pem
+secrets:
+  server_key:
+    file: ./server-key.pem

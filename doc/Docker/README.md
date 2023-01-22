@@ -1,3 +1,23 @@
+# Utils
+https://labs.play-with-docker.com/
+https://hub.docker.com/r/dockersamples/visualizer
+https://github.com/stefanprodan/swarmprom/blob/master/docker-compose.yml
+https://www.portainer.io/
+TICK Stack https://wiki.archlinux.org/title/TICK_stack
+Harbor registry https://github.com/goharbor/harbor
+ELK https://www.elastic.co/fr/what-is/elk-stack
+https://swarmpit.io/
+
+
+## Images
+VotingApp 
+https://github.com/dockersamples/example-voting-app
+https://gitlab.com/voting-application
+instavote/vote:latest
+instavote/vote:indent
+City lucj/city:1.0
+Fake logs mingrammer/flog
+lucj/whoami:1.0
 
 # Namespaces
 pid: isolation de l'espace des processus
@@ -192,3 +212,141 @@ https://gitlab.com/voting-application
 
 ## Scale
 $ docker compose up -d --scale SERVICE_NAME=2
+
+# Docker Swarm
+
+## Distributed consensus
+http://thesecretlivesofdata.com/raft/
+RAFT est un protocole d'implementation de consensus distribué
+
+## Create new swarm cluster
+docker swarm init
+node1: $ docker swarm init --advertise-addr 129.168.99.100
+
+## Node
+### List nodes
+(manager) node: docker node ls
+
+### Add a new node
+docker swarm join
+(worker) node2: $ docker join --token TOKEN ADDRESS:PORT
+
+### Add node manager to cluster
+(manager) node1: $ docker swarm join-token manager
+(worker) node3: $ docker join --token TOKEN ADDRESS:PORT
+
+### Destitution node manager to worker
+(manager) node1: docker node demote node1
+=> node 1 will transform to a worker node
+
+### Promote node worker to manager
+(manager) node3: docker node promote node2
+=> node 1 will transform to a manager node
+
+### Node Availability
+#### Pause
+Can't add new task and actual tasks will continue
+(manager) node1: $ docker node update --availability pause node2
+#### Drain
+Transfer alla tasks in another node
+(manager) node1: $ docker node update --availability drain node2
+#### Active
+Active node normally
+(manager) node1: $ docker node update --availability active node2
+
+### Node Label
+List node labels
+$ docker node inspect -f '{{ json .Spec.Labels }}' node1
+
+Add label
+$ docker node update --label-add Memcached=true node1
+
+## Service
+### Create
+$ docker service create --name www -p 8080:80 --replicas 3 nginx
+
+Service to visualize containers in cluster
+$ docker service create \
+--name visualizer \
+--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock \
+--constraint 'node.role == manager' \
+--publish "8000:8080" dockersamples/visualizer:stable
+
+### List
+$ docker service ls
+$ docker service ps www
+### Scale
+$ docker service scale www=4
+
+### Rolling update
+$ docker service create --update-parallelism 2 --update-delay 5s -p 80:80 --replicas 4 --name vote instavote/vote
+$ docker service update --image instavote/vote:indent vote
+
+### Rollback
+$ docker service rollback SERVICE_NAME
+
+Rollback automatic
+docker service create --name whoami --replicas 2 --update-failure-action rollback --update-delay 10s --update-monitor 10s -p 8000:8000 lucj/whoami:1.0
+
+### Secret
+#### Create secret
+$ echo "PASSWORD" | docker secret create password -
+
+#### Add secret to a service
+$ docker service update --secret-add=SECRET_NAME SERVICE_NAME
+$ docker create service --name=api --secret=SECRET_NAME IMAGE_NAME
+Secret location in container: /run/secrets/SECRET_NAME
+
+## Stack
+### Deploy stack
+$ docker stack deploy -c COMPOSE.YAML STACK_NAME
+
+#### Scale container
+deploy:
+    mode: replicated
+    replicas: NUMBER
+
+#### Create container in each node
+deploy:
+    mode: global
+
+#### Placement
+Create container only in nodes with linux OS
+deploy:
+    mode: global
+    placement:
+        constraints: [node.platform.os == linux]
+
+Create container only in manager nodes
+deploy:
+    mode: replicated
+    replicas: 1
+    placement:
+        constraints: [node.role == manager]
+
+### List stacks
+$ docker stack ls
+
+### List stack services
+$ docker stack services STACK_NAME
+
+## Autolock (security)
+### Show swarm private key
+$ sudo cat /var/lib/docker/swarm/certificates/swarm-node.key
+### Lock the swarm
+$ docker swarm update --autolock=true
+SWMKEY-1-cixdJrRSUaj8Fe35RmPIU3M8dV+0BzW6SoVKzCRp41c
+### Unlock swarm
+$ docker swarm unlock
+Past the key
+
+## Cluster Backup
+(cluster 1) $ sudo systemctl stop docker
+(cluster 1) Copy /var/lib/docker/swarm in local storage
+(cluster 1) $ sudo systemctl start docker
+
+(cluster 2) $ sudo systemctl stop docker
+(cluster 2) $ rm -rf /var/lib/docker/swarm
+(cluster 1) Copy the backup of (cluster 1)/var/lib/docker/swarm in (cluster 2)/var/lib/docker/swarm
+(cluster 2) $ sudo systemctl start docker
+(cluster 2) $ docker swarm init --force-new-cluster
