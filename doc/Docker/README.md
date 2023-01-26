@@ -31,6 +31,7 @@ user: mapping UID/GID entre l'hote et les contenaires
 $ curl -sSL https://get.docker.com | sh
 $ sudo usermod -aG docker USER
 $ docker version
+restart 
 
 # Play with docker
 https://labs.play-with-docker.com/
@@ -350,3 +351,52 @@ Past the key
 (cluster 1) Copy the backup of (cluster 1)/var/lib/docker/swarm in (cluster 2)/var/lib/docker/swarm
 (cluster 2) $ sudo systemctl start docker
 (cluster 2) $ docker swarm init --force-new-cluster
+
+# Network
+## Create 
+$ docker network create --driver DRIVER_NAME NET_NAME
+docker native driver list = (host, none, bridge, overlay, macvlan)
+overlay : cluster network type (exp: swarm)
+
+### Crypt request/response
+$ docker network create --opt encrypted --driver overlay mynet
+
+## Util commands
+### List network interface
+$ ip a
+$ ip a show docker0
+
+### List network in host machine
+$ ip link
+$ ip link show docker0
+
+### List interfaces by network
+$ brctl show
+$ brctl show docker0
+
+### List network interfaces IN/OUT 
+$ sudo iptables -t nat -nvL
+
+### List network namespaces
+$ sudo ls /var/run/docker/netns
+
+### List interfaces of a namespace
+exp ingress_sbox namespace
+$ sudo nsenter --net=/var/run/docker/netns/ingress_sbox ip a
+
+### Pattern of a request in a namespace
+exp ingress_sbox namespace
+$ sudo nsenter --net=/var/run/docker/netns/ingress_sbox iptables -t nat -nvL
+
+### List mangle table to see updated request package 
+exp ingress_sbox namespace
+$ sudo nsenter --net=/var/run/docker/netns/ingress_sbox iptables -t mangle -nvL
+
+### See IPVS configuration
+$ sudo nsenter --net=/var/run/docker/netns/ingress_sbox ipvsadm -L
+
+
+## Inspect container network with Go template
+$ docker container inspect -f "{{ json .NetworkSettings.Networks }}" c1 | jq .
+$ docker network inspect -f "{{ json .Containers }}" bridge | jq .
+
