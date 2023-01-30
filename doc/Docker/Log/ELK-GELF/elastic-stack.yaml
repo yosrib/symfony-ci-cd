@@ -1,16 +1,21 @@
 version: '3.8'
 
+configs:
+  logstash-conf:
+    file: ./logstash.conf
+
 services:
   logstash:
     image: logstash:7.14.2
+    configs:
+      - source: logstash-conf
+        target: /config/logstash.conf
     environment:
       discovery.seed_hosts: logstash
       LS_JAVA_OPTS: "-Xms512m -Xmx512m"
-    volumes:
-      - ./logstash.conf:/config/logstash.conf
     command: ["logstash", "-f", "/config/logstash.conf"]
     ports:
-      - "8080:8080"
+      - "12201:12201/udp"
   elasticsearch:
     image: elasticsearch:7.14.2
     environment:
