@@ -1,3 +1,4 @@
 .github
 doc
 .gitignore
+/symfony/.phpunit.result.cache

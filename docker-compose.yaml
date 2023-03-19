@@ -15,12 +15,30 @@ services:
 
   php:
     container_name: php-symfony-ci-cd
-    environment:
-      APP_ENV: dev
-      ENABLED_EXCEPTION_DEV: 0
     build:
       context: .
+      target: dev
     volumes:
       - './symfony:/var/www/symfony'
     ports:
       - '9000:9000'
+    depends_on:
+      - db
+
+  db:
+    container_name: db-symfony-ci-cd
+    image: mariadb:10.7.8-focal
+    restart: always
+    command: ['--default-authentication-plugin=mysql_native_password']
+    volumes:
+      - 'mariabd_data:/var/lib/mysql'
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: symfony
+      MARIADB_USER: app_user
+      MARIADB_PASSWORD: app_password
+    ports:
+      - '3306:3306'
+
+volumes:
+  mariabd_data:
