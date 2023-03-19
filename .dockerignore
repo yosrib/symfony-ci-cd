@@ -1,4 +1,6 @@
 .github
 doc
 .gitignore
+/symfony/var
+/symfony/vendor
 /symfony/.phpunit.result.cache

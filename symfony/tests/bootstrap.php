@@ -11,7 +11,6 @@ if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
 }
 
 if (isset($_ENV['BOOTSTRAP_RUN_SCRIPT'])) {
-    // executes the "php bin/console cache:clear" command
     passthru(sprintf(
         'php "%s/../bin/console" lexik:jwt:generate-keypair --skip-if-exists',
         __DIR__

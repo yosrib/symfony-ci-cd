@@ -11,9 +11,9 @@ RUN composer selfupdate --2
 
 WORKDIR /var/www/symfony
 
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD php -v;
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD php -v
 
-CMD ['php-fpm', '-f']
+CMD ["php-fpm", "-F"]
 
 EXPOSE 9000
 
@@ -58,17 +58,21 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN install-php-extensions xdebug-3.1.5;
 COPY .docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+### COPY SOURCE CODE FROM PROD TARGET
+COPY --from=prod /var/www/symfony/ ./
+
 ### COPY PROJECT FILES AND DIRECTORY FOR DEV MODE
-COPY symfony .
+COPY symfony/.env.test ./
+COPY symfony/phpunit.xml.dist ./
+COPY symfony/bin/phpunit ./bin/
+COPY symfony/tests tests/
 
 RUN set -eux; \
     composer install --prefer-dist --no-interaction --no-scripts --no-progress; \
     composer run-script post-install-cmd \
     composer clear-cache
 
-FROM dev as testing
-
-### BUILD FOR TESTING
-ENV APP_ENV=test
-
-ENTRYPOINT ["php"]
+### CLEAN VAR DIRECTORIES
+RUN set -eux; \
+    chmod -R 0775 /var/www/symfony/var/cache /var/www/symfony/var/log; \
+    chown -R www-data:www-data /var/www/symfony/var/cache /var/www/symfony/var/log;
