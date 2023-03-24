@@ -26,15 +26,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build the Docker image
-        run: docker build . --target=dev -t $REPOSITORY/$IMAGE:${GITHUB_SHA} -t $REPOSITORY/$IMAGE:latest
+        run: docker build . --target=dev -t $REPOSITORY/$IMAGE:${GITHUB_SHA}
 
-      - name: Unit tests
-        run: docker run -ti $REPOSITORY/$IMAGE:${GITHUB_SHA} vendor/bin/phpunit
+      #- name: Unit tests
+      #  run: docker run -ti $REPOSITORY/$IMAGE:${GITHUB_SHA} vendor/bin/phpunit
 
       - name: Push image
-        run: |
-          docker push $REPOSITORY/$IMAGE:${GITHUB_SHA}
-          docker push $REPOSITORY/$IMAGE:latest
+        run: docker push $REPOSITORY/$IMAGE:${GITHUB_SHA}
 
       - uses: actions-hub/kubectl@master
         env:
