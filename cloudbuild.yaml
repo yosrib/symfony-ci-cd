@@ -13,25 +13,16 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_IMAGE}:${_VERSION}']
 
-  - id: 'Set context'
-    name: 'gcr.io/cloud-builders/kubectl'
-    args :
-      - 'config'
-      - 'set-context'
-      - '--current'
-      - '--namespace=app-dev'
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
-
   - id: 'Deploy image with kubernetes'
     name: 'gcr.io/cloud-builders/kubectl'
     args :
       - 'set'
       - 'image'
-      - 'deployment/app'
-      - 'init-service=${_IMAGE}:${_VERSION}'
+      - 'deploy/app'
+      #- 'init-service=${_IMAGE}:${_VERSION}'
       - 'php=${_IMAGE}:${_VERSION}'
+      - '--namespace=app-dev'
+      - '--record'
     env :
       - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'

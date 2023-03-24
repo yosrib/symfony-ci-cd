@@ -285,6 +285,10 @@ $ kubectl delete namespace/NAMESPACE_NAME
 ```bash
 $ kubectl config view
 ```
+### Get context list
+```bash
+$ kubectl config get-contexts
+```
 ### Get current context
 ```bash
 $ kubectl config current-context
