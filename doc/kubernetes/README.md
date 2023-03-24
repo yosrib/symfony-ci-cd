@@ -293,6 +293,9 @@ $ kubectl config current-context
 ```bash
 $ kubectl config set-context CONTEXT_NAME --namespace=NAMESPACE_NAME
 ```
+```bash
+$ kubectl config set-context --current --namespace=app-dev
+```
 ### Define quota for namespace
 ```bash
 $ kubectl apply -f quota.yaml --namespace=NAMESPACE_NAME

@@ -1,0 +1,44 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+
+env:
+  #PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  #GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+  #GKE_ZONE: us-central1-c   # TODO: update to cluster zone
+  #DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
+  REPOSITORY: yosribahri # TODO: update to Artifact Registry docker repository
+  IMAGE: symfony
+
+jobs:
+
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: docker build . --target=dev -t $REPOSITORY/$IMAGE:${GITHUB_SHA} -t $REPOSITORY/$IMAGE:latest
+
+      - name: Unit tests
+        run: docker run -ti $REPOSITORY/$IMAGE:${GITHUB_SHA} vendor/bin/phpunit
+
+      - name: Push image
+        run: |
+          docker push $REPOSITORY/$IMAGE:${GITHUB_SHA}
+          docker push $REPOSITORY/$IMAGE:latest
+
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.GCP_KLEE_KUBE_CONFIG }}
+        with:
+          args: get pods -n app-dev
+  #kubectl set image deployment/deployment_name myInitContainer=url_to_container container=url_to_container
