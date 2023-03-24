@@ -4,3 +4,5 @@ doc
 /symfony/var
 /symfony/vendor
 /symfony/.phpunit.result.cache
+/.kube/
+/symfony/config/jwt/

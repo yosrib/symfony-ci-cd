@@ -58,19 +58,32 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN install-php-extensions xdebug-3.1.5;
 COPY .docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-### COPY SOURCE CODE FROM PROD TARGET
-COPY --from=prod /var/www/symfony/ ./
+### INSTALL DEPENDENCIES
+COPY symfony/composer.json ./
+COPY symfony/composer.lock ./
+COPY symfony/symfony.lock ./
+
+RUN set -eux;  \
+    composer install --prefer-dist --no-interaction --no-scripts --no-progress; \
+    composer clear-cache
 
 ### COPY PROJECT FILES AND DIRECTORY FOR DEV MODE
 COPY symfony/.env.test ./
+COPY symfony/.env ./
 COPY symfony/phpunit.xml.dist ./
-COPY symfony/bin/phpunit ./bin/
+COPY symfony/bin bin/
+COPY symfony/config config/
+COPY symfony/migrations migrations/
+COPY symfony/public public/
+COPY symfony/src src/
+COPY symfony/templates templates/
 COPY symfony/tests tests/
 
 RUN set -eux; \
-    composer install --prefer-dist --no-interaction --no-scripts --no-progress; \
-    composer run-script post-install-cmd \
-    composer clear-cache
+    mkdir -p /var/www/symfony/var/cache /var/www/symfony/var/log; \
+    composer dump-autoload --classmap-authoritative; \
+    composer run-script post-install-cmd; \
+    chmod +x bin/console; sync;
 
 ### CLEAN VAR DIRECTORIES
 RUN set -eux; \

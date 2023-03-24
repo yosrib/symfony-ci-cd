@@ -100,6 +100,10 @@ $ kubectl logs POD_NAME -c CONTAINER_NAME
 ```bash
 $ kubectl exec POD_NAME -c CONTAINER_NAME -- COMMAND
 ```
+```bash
+$ kubectl exec -ti database -n app-dev -- bash
+```
+
 ### Delete POD
 ```bash
 $ kubectl delete pod POD_NAME

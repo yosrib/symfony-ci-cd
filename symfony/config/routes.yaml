@@ -1,4 +1,9 @@
-controllers:
+api:
+    resource: ../src/Controller
+    type: attribute
+    prefix: api
+
+api_v1:
     resource: ../src/Controller/V1
     type: attribute
     prefix: api/v1
