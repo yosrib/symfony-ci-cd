@@ -7,11 +7,15 @@ steps:
 
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '.']
+    args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '-t', '${_IMAGE}:latest', '.']
 
-  - id: 'Push docker image to registry'
+  - id: 'Push sha docker image to registry'
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_IMAGE}:${_VERSION}']
+
+  - id: 'Push latest docker image to registry'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_IMAGE}:latest']
 
   - id: 'Deploy image with kubernetes'
     name: 'gcr.io/cloud-builders/kubectl'
@@ -19,7 +23,6 @@ steps:
       - 'set'
       - 'image'
       - 'deploy/app'
-      #- 'init-service=${_IMAGE}:${_VERSION}'
       - 'php=${_IMAGE}:${_VERSION}'
       - '--namespace=app-dev'
       - '--record'
