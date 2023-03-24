@@ -7,11 +7,22 @@ steps:
 
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_IMAGE}:${_VERSION}', '.']
+    args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '.']
 
   - id: 'Push docker image to registry'
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_IMAGE}:${_VERSION}']
+
+  - id: 'Set context'
+    name: 'gcr.io/cloud-builders/kubectl'
+    args :
+      - 'config'
+      - 'set-context'
+      - '--current'
+      - '--namespace=app-dev'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
 
   - id: 'Deploy image with kubernetes'
     name: 'gcr.io/cloud-builders/kubectl'
@@ -21,15 +32,13 @@ steps:
       - 'deployment/app'
       - 'init-service=${_IMAGE}:${_VERSION}'
       - 'php=${_IMAGE}:${_VERSION}'
-      - '-n app-dev'
-      - '--record'
     env :
       - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
 
 substitutions:
   _PROJECT_ID : sonic-shuttle-381413
-  _VERSION : latest
+  _VERSION : $COMMIT_SHA
   _IMAGE: us-central1-docker.pkg.dev/sonic-shuttle-381413/symfony/symfony-cicd
   _CLUSTER_NAME: cluster-1
   _CLUSTER_ZONE: us-central1-c
