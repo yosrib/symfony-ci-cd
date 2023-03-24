@@ -22,6 +22,7 @@ steps:
       - 'init-service=${_IMAGE}:${_VERSION}'
       - 'php=${_IMAGE}:${_VERSION}'
       - '-n app-dev'
+      - '--record'
     env :
       - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
