@@ -5,7 +5,7 @@ steps:
 
   - id: 'Switch to tag'
     name: 'gcr.io/cloud-builders/git'
-    args: ['checkout', 'tags/${_VERSION}', 'tmp-branch']
+    args: ['checkout', 'tags/${_VERSION}', '-b', 'tmp-branch']
 
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
