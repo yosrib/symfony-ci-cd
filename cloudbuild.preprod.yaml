@@ -3,6 +3,10 @@ steps:
     name: 'gcr.io/cloud-builders/git'
     args: ['clone', 'https://github.com/yosrib/symfony-ci-cd']
 
+  - id: 'Switch to tag'
+    name: 'gcr.io/cloud-builders/git'
+    args: ['checkout', 'tags/${_VERSION}', 'tmp-branch']
+
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '.']
