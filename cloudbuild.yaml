@@ -25,7 +25,6 @@ steps:
       - 'deploy/app'
       - 'php=${_IMAGE}:${_VERSION}'
       - '--namespace=app-dev'
-      - '--record'
     env :
       - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
