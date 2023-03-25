@@ -3,6 +3,10 @@ steps:
     name: 'gcr.io/cloud-builders/git'
     args: ['clone', 'https://github.com/yosrib/symfony-ci-cd']
 
+  - id: 'Fetch all'
+    name: 'gcr.io/cloud-builders/git'
+    args: ['fetch', '--all']
+
   - id: 'Switch to tag'
     name: 'gcr.io/cloud-builders/git'
     args: ['checkout', 'tags/${_VERSION}', '-b', 'tmp-branch']
