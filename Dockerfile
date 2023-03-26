@@ -52,11 +52,11 @@ RUN set -eux; \
 
 FROM common as dev
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+#COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
 ### XDEBUG
-RUN install-php-extensions xdebug-3.1.5;
-COPY .docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN install-php-extensions xdebug-3.1.5;
+#COPY .docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 ### INSTALL DEPENDENCIES
 COPY symfony/composer.json ./
