@@ -12,6 +12,8 @@
         "doctrine/orm": "^2.14",
         "friendsofsymfony/rest-bundle": "^3.5",
         "lexik/jwt-authentication-bundle": "^2.18",
+        "nelmio/cors-bundle": "^2.3",
+        "stof/doctrine-extensions-bundle": "*",
         "symfony/console": "6.1.*",
         "symfony/dotenv": "6.1.*",
         "symfony/flex": "^2",

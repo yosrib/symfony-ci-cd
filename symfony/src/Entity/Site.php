@@ -8,14 +8,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
-class Site
+class Site extends AbstractEntity
 {
-    #[Groups(groups: ['get'])]
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id;
-
     #[Assert\NotBlank(groups: ['set'])]
     #[Assert\Url(groups: ['set'])]
     #[Groups(['get', 'set'])]
@@ -30,11 +24,6 @@ class Site
     #[Groups(['get', 'set'])]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getUrl(): ?string
     {

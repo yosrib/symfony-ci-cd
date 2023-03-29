@@ -6,9 +6,11 @@ use App\Entity\Site;
 use App\Validator\Validator;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -26,10 +28,49 @@ class SiteController extends AbstractController
     {
     }
 
+    #[Rest\QueryParam(
+        name: 'search', description: 'Search', strict: true, nullable: true
+    )]
+    #[Rest\QueryParam(
+        name: '_start', requirements: '\d+', default: 0, description: 'Start list', strict: true, nullable: true
+    )]
+    #[Rest\QueryParam(
+        name: '_end', requirements: '\d+', default: 50, description: 'End list', strict: true, nullable: true
+    )]
+    #[Rest\QueryParam(
+        name: '_order',
+        requirements: '(ASC|DESC|asc|desc)',
+        default: 'ASC',
+        description: 'Order list',
+        strict: true,
+        nullable: true
+    )]
+    #[Rest\QueryParam(
+        name: '_sort',
+        description: 'Sort field',
+        strict: true,
+        nullable: true
+    )]
     #[Rest\Get(name: 'api_v1_get_collection_sites')]
-    public function getCollection(): JsonResponse
+    public function getCollection(ParamFetcher $paramFetcher): JsonResponse
     {
-        return $this->json(data: $this->em->getRepository(Site::class)->findAll(), context: ['groups' => 'get']);
+        $start = $paramFetcher->get('_start');
+        $end = $paramFetcher->get('_end');
+        $order = $paramFetcher->get('_order');
+        $sort = $paramFetcher->get('_sort');
+        $search = $paramFetcher->get('search');
+
+        return $this->json(
+            data: $this->em->getRepository(Site::class)->search(
+                search: $search,
+                order: $order,
+                sort: $sort,
+                limit: $end - $start,
+                offset: $start
+            ),
+            headers: ['X-Total-Count' => $this->em->getRepository(Site::class)->total($search)],
+            context: ['groups' => 'get']
+        );
     }
 
     #[Rest\Get(path: '/{id}', name: 'api_v1_get_sites')]
@@ -37,6 +78,14 @@ class SiteController extends AbstractController
     public function get(int $id): JsonResponse
     {
         return $this->json(data: $this->em->getRepository(Site::class)->find($id), context: ['groups' => 'get']);
+    }
+
+    #[Rest\Delete(path: '/{id}', name: 'api_v1_delete_sites')]
+    public function delete(int $id): JsonResponse
+    {
+        $entity = $this->em->getRepository(Site::class)->find($id);
+        $this->em->getRepository(Site::class)->remove($entity, true);
+        return $this->json(data: [], status: Response::HTTP_NO_CONTENT, context: ['groups' => 'get']);
     }
 
     #[Rest\Post(name: 'api_v1_post_sites')]
