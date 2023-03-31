@@ -1,10 +1,6 @@
 #https://source.developers.google.com/p/gcp-devops-338510/r/repo-5
 
 steps:
-  - id: 'Clone project'
-    name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/yosrib/symfony-ci-cd']
-
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
     args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '-t', '${_IMAGE}:latest', '.']
@@ -12,10 +8,6 @@ steps:
   - id: 'Push sha docker image to registry'
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_IMAGE}:${_VERSION}']
-
-  - id: 'Push latest docker image to registry'
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '${_IMAGE}:latest']
 
   - id: 'Deploy image with kubernetes'
     name: 'gcr.io/cloud-builders/kubectl'

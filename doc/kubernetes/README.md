@@ -665,6 +665,21 @@ $ helm install NAME REPOSITORY
 $ helm install nginx stable/nginx-ingress
 ```
 
+## Create chart
+```bash
+$ helm create CHART_NAME
+```
+```bash
+$ helm create api
+```
+### Install created chart
+```bash
+$ helm install CHART_NAME DIR_PATH --values VALUE_PATH -n helm-test
+```
+```bash
+$ helm install api-chart api --values stack/values-dev.yaml -n helm-test
+```
+
 ## List charts
 ```bash
 $ helm list
