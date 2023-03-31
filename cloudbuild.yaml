@@ -3,11 +3,15 @@
 steps:
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '-t', '${_IMAGE}:latest', '.']
+    args: ['build', '--target', 'dev', '-t', '${_IMAGE}:${_VERSION}', '-t', '${_IMAGE}:dev', '.']
 
   - id: 'Push sha docker image to registry'
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_IMAGE}:${_VERSION}']
+
+  - id: 'Push dev docker image to registry'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_IMAGE}:dev']
 
   - id: 'Deploy image with kubernetes'
     name: 'gcr.io/cloud-builders/kubectl'
