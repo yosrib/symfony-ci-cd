@@ -4,23 +4,28 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[OA\Property(type: 'int')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
+    #[OA\Property(type: 'string')]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email;
 
+    #[OA\Property(type: 'array')]
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[OA\Property(type: 'string')]
     #[ORM\Column(type: 'string')]
     private ?string $password;
 

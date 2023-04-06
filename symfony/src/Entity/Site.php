@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SiteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,15 +14,18 @@ class Site extends AbstractEntity
     #[Assert\NotBlank(groups: ['set'])]
     #[Assert\Url(groups: ['set'])]
     #[Groups(['get', 'set'])]
+    #[OA\Property(type: 'string')]
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $url = null;
 
     #[Assert\NotBlank(groups: ['set'])]
     #[Groups(['get', 'set'])]
+    #[OA\Property(type: 'string')]
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
     #[Groups(['get', 'set'])]
+    #[OA\Property(type: 'string')]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 

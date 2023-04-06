@@ -1,0 +1,26 @@
+nelmio_api_doc:
+    documentation:
+        servers:
+            - url: http://kube-api-helm.devengine.fr
+              description: API over HTTP
+            #- url: https://api.example.com/secured
+            #  description: API over HTTPS
+        info:
+            title: Symfony App
+            description: This is an awesome app!
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: [ ]
+    areas: # to filter documented areas
+        default:
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        v1:
+            path_patterns:
+                - ^/api/v1
