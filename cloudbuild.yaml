@@ -1,5 +1,3 @@
-#https://source.developers.google.com/p/gcp-devops-338510/r/repo-5
-
 steps:
   - id: 'Build docker image'
     name: 'gcr.io/cloud-builders/docker'
@@ -20,7 +18,7 @@ steps:
       - 'image'
       - 'deploy/app'
       - 'php=${_IMAGE}:${_VERSION}'
-      - '--namespace=app-dev'
+      - '--namespace=dev'
     env :
       - 'CLOUDSDK_COMPUTE_ZONE=${_CLUSTER_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
@@ -29,5 +27,5 @@ substitutions:
   _PROJECT_ID : sonic-shuttle-381413
   _VERSION : $COMMIT_SHA
   _IMAGE: us-central1-docker.pkg.dev/sonic-shuttle-381413/symfony/symfony-cicd
-  _CLUSTER_NAME: cluster-1
-  _CLUSTER_ZONE: us-central1-c
+  _CLUSTER_NAME: stack-cluster
+  _CLUSTER_ZONE: europe-central2-a
