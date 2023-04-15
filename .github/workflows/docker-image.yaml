@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Depot CLI
+        uses: depot/setup-action@v1
+
       - name: Login to Google Cloud registry
         uses: google-github-actions/setup-gcloud@v0.6.0
         with:
