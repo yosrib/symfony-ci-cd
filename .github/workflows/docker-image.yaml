@@ -9,21 +9,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: 'actions/checkout@v3'
 
       - name: Set up Depot CLI
-        uses: depot/setup-action@v1
+        uses: 'depot/setup-action@v1'
 
       - id: 'auth'
         name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+          service_account: 'build-services@sonic-shuttle-381413.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/381413/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
 
       - name: Login to Artifact Registry
-        uses: docker/login-action@v1
+        uses: 'docker/login-action@v1'
         with:
           registry: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}
           username: oauth2accesstoken
@@ -44,7 +49,7 @@ jobs:
       #  run: gcloud auth configure-docker
 
       - name: Build and push
-        uses: depot/build-push-action@v1
+        uses: 'depot/build-push-action@v1'
         with:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
