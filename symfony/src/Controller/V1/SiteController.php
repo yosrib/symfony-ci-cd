@@ -51,7 +51,18 @@ class SiteController extends AbstractController
     {
     }
 
-    #[OA\Get(operationId: 'getSites', summary: 'Get list of sites')]
+    #[OA\Get(
+        operationId: 'getSites',
+        summary: 'Get list of sites',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
+    )]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Returns list of an sites',
@@ -143,6 +154,14 @@ class SiteController extends AbstractController
     #[OA\Head(
         operationId: 'checkSiteById',
         summary: 'Check site by id',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -157,6 +176,14 @@ class SiteController extends AbstractController
     #[OA\Get(
         operationId: 'getSiteById',
         summary: 'Returns site by id',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -186,7 +213,18 @@ class SiteController extends AbstractController
         return $this->json(data: $site, context: ['groups' => 'get']);
     }
 
-    #[OA\Delete(operationId: 'deleteSiteById', summary: 'Delete site by id')]
+    #[OA\Delete(
+        operationId: 'deleteSiteById',
+        summary: 'Delete site by id',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
+    )]
     #[OA\Response(
         response: Response::HTTP_NO_CONTENT,
         description: 'Delete site by id'
@@ -213,8 +251,18 @@ class SiteController extends AbstractController
         return $this->json(data: [], status: Response::HTTP_NO_CONTENT);
     }
 
-
-    #[OA\Post(operationId: 'createSiteBy', summary: 'Create site')]
+    #[OA\Post(
+        operationId: 'createSiteBy',
+        summary: 'Create site',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
+    )]
     #[OA\RequestBody(
         description: 'Site request',
         required: true,
@@ -254,8 +302,30 @@ class SiteController extends AbstractController
         return $this->json(data: $site, status: Response::HTTP_CREATED, context: ['groups' => 'get']);
     }
 
-    #[OA\Put(operationId: 'updateSiteBy', summary: 'Update site')]
-    #[OA\Patch(operationId: 'updatePartialSiteBy', summary: 'Update partial site')]
+    #[OA\Put(
+        operationId: 'updateSiteBy',
+        summary: 'Update site',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
+    )]
+    #[OA\Patch(
+        operationId: 'updatePartialSiteBy',
+        summary: 'Update partial site',
+        security: [
+            new OA\SecurityScheme(
+                securityScheme: "api_key",
+                type: "apiKey",
+                name: "api_key",
+                in: "header"
+            )
+        ],
+    )]
     #[OA\RequestBody(
         description: 'Site request',
         required: true,
