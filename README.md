@@ -17,7 +17,7 @@ $ gcloud auth configure-docker gcr.io
 https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker
 
 # Github action
-# References
+## References
 ### SSH google compute engine
 https://github.com/google-github-actions/ssh-compute
 
@@ -33,3 +33,8 @@ https://cloud.google.com/compute/docs/containers/deploying-containers
 
 ### Jenkins installs as container
 https://www.jenkins.io/doc/book/installing/docker/
+#### Trigger jenkins job
+https://github.com/marketplace/actions/jenkins-job-trigger
+
+### Create 
+$ gcloud iam workload-identity-pools create "github-identity-pool" --project="sonic-shuttle-381413" --location="global" --display-name="Github identity pool"
