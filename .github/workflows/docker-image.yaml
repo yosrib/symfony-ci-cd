@@ -49,7 +49,7 @@ jobs:
       #    service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Configure docker for GCP
-        run: gcloud auth application-default
+        run: gcloud auth application-default login
 
       - name: Build and push
         uses: 'depot/build-push-action@v1'
