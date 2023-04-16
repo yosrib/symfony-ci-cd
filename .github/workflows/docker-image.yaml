@@ -48,13 +48,13 @@ jobs:
       #    project_id: ${{ secrets.GCP_PROJECT_ID }}
       #    service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      #- name: Configure docker for GCP
-      #  run: gcloud auth configure-docker
+      - name: Configure docker for GCP
+        run: gcloud auth configure-docker
 
       - name: Build and push
         uses: 'depot/build-push-action@v1'
         with:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
-          #token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
+          token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           push: true
           tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
