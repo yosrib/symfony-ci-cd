@@ -29,6 +29,10 @@ jobs:
           access_token_lifetime: '300s'
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
           workload_identity_provider: 'projects/300921087898/locations/global/workloadIdentityPools/github-action-pool/providers/github-action--provider'
+          #service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - run: |-
+          gcloud --quiet auth configure-docker
 
       - name: Docker configuration
         run: |-
@@ -59,7 +63,7 @@ jobs:
       - name: Build with depot
         run: |
           docker build . --target dev \
-          -t ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+          -t us-central1-docker.pkg.dev/sonic-shuttle-381413/symfony/symfony-cicd:${GITHUB_SHA}
 
 
       #- name: Build with depot
@@ -73,7 +77,7 @@ jobs:
       #      ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
 
       - name: Push sha image
-        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+        run: docker push us-central1-docker.pkg.dev/sonic-shuttle-381413/symfony/symfony-cicd:${GITHUB_SHA}
       #  env:
       #    DEPOT_TOKEN: ${{ secrets.DEPOT_PROJECT_TOKEN }}
       #- name: Push dev image
