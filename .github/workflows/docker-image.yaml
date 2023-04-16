@@ -48,13 +48,13 @@ jobs:
       #- name: Configure docker for GCP
       #  run: gcloud auth application-default login
 
-      #- name: Set up Depot CLI
-      #  uses: 'depot/setup-action@v1'
+      - name: Set up Depot CLI
+        uses: 'depot/setup-action@v1'
 
       - name: Build and push
-        uses: 'docker/build-push-action@v1'
+        uses: 'depot/build-push-action@v1'
         with:
-          #project: ${{ secrets.DEPOT_PROJECT_ID }}
-          #token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
-          push: true
+          project: ${{ secrets.DEPOT_PROJECT_ID }}
+          token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
+          push: false
           tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
