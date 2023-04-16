@@ -17,6 +17,9 @@ jobs:
       - name: Checkout code
         uses: 'actions/checkout@v3'
 
+      - name: Set up Depot CLI
+        uses: 'depot/setup-action@v1'
+
       # @see https://github.com/google-github-actions/auth#setting-up-workload-identity-federation
       - id: 'auth'
         name: Authenticate with Google Cloud
@@ -48,18 +51,14 @@ jobs:
       #- name: Configure docker for GCP
       #  run: gcloud auth application-default login
 
-      - name: Set up Depot CLI
-        uses: 'depot/setup-action@v1'
 
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
-        with:
-          target: dev
-          context: .
-          tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+
+      - name: Build with depot
+        run: |
+          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --target dev \
+          -t ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+        env:
+          DEPOT_TOKEN: ${{ secrets.DEPOT_PROJECT_TOKEN }}
 
       #- name: Build with depot
       #  uses: 'depot/build-push-action@v1'
