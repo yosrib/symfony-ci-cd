@@ -33,7 +33,7 @@ jobs:
       - name: Login to Artifact Registry
         uses: 'docker/login-action@v2'
         with:
-          registry: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}
+          registry: https://${{ secrets.GOOGLE_CONTAINER_REGISTRY }}
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
 
