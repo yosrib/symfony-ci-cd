@@ -51,10 +51,18 @@ jobs:
       - name: Set up Depot CLI
         uses: 'depot/setup-action@v1'
 
-      - name: Build and push
+      - name: Build with depot
         uses: 'depot/build-push-action@v1'
         with:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           push: false
-          tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
+          tags: |
+            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
+
+      - name: Push sha image
+        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cic:${GITHUB_SHA}
+
+      - name: Push dev image
+        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
