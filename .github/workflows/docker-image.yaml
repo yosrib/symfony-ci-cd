@@ -26,8 +26,8 @@ jobs:
         with:
           token_format: 'access_token'
           access_token_lifetime: '300s'
-          service_account: 'build-services@sonic-shuttle-381413.iam.gserviceaccount.com'
-          workload_identity_provider: 'projects/300921087898/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: 'projects/300921087898/locations/global/workloadIdentityPools/github-action-pool/providers/github-action--provider'
 
       - name: Login to Artifact Registry
         uses: 'docker/login-action@v1'
