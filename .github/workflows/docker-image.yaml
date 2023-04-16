@@ -52,17 +52,24 @@ jobs:
         uses: 'depot/setup-action@v1'
 
       - name: Build with depot
-        uses: 'depot/build-push-action@v1'
-        with:
-          project: ${{ secrets.DEPOT_PROJECT_ID }}
-          token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
-          push: false
-          tags: |
-            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
-            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
+        run: |
+          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --push 
+          --tag ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+        env:
+          DEPOT_TOKEN: ${{ secrets.DEPOT_PROJECT_TOKEN }}
 
-      - name: Push sha image
-        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cic:${GITHUB_SHA}
+      #- name: Build with depot
+      #  uses: 'depot/build-push-action@v1'
+      #  with:
+      #    project: ${{ secrets.DEPOT_PROJECT_ID }}
+      #    token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
+      #    push: false
+      #    tags: |
+      #      ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+      #      ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
 
-      - name: Push dev image
-        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
+      #- name: Push sha image
+      #  run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cic:${GITHUB_SHA}
+
+      #- name: Push dev image
+      #  run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
