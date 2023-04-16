@@ -53,8 +53,8 @@ jobs:
 
       - name: Build with depot
         run: |
-          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --push 
-          --tag ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --push --target dev \
+          -t ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
         env:
           DEPOT_TOKEN: ${{ secrets.DEPOT_PROJECT_TOKEN }}
 
