@@ -53,7 +53,7 @@ jobs:
 
       - name: Build with depot
         run: |
-          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --push --target dev \
+          depot build . --project ${{ secrets.DEPOT_PROJECT_ID }} --target dev \
           -t ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
         env:
           DEPOT_TOKEN: ${{ secrets.DEPOT_PROJECT_TOKEN }}
@@ -68,8 +68,8 @@ jobs:
       #      ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
       #      ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
 
-      #- name: Push sha image
-      #  run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cic:${GITHUB_SHA}
+      - name: Push sha image
+        run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cic:${GITHUB_SHA}
 
       #- name: Push dev image
       #  run: docker push ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
