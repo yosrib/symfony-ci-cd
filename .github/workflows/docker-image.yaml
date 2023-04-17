@@ -42,7 +42,10 @@ jobs:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           push: true
-          tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${GITHUB_SHA}
+          target: dev
+          tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${{ github.sha }}
+          #build-args: |
+          #  BUILD_DATE=date
         env:
           GITHUB_SHA: ${GITHUB_SHA}
 
