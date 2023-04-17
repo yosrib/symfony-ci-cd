@@ -36,16 +36,15 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
 
-      - name: Build with depot
+      - name: Build and push docker image
         uses: 'depot/build-push-action@v1'
         with:
           project: ${{ secrets.DEPOT_PROJECT_ID }}
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           push: true
           target: dev
-          tags: ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${{ github.sha }}
+          tags: |
+            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:${{ github.sha }}
+            ${{ secrets.GOOGLE_CONTAINER_REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/symfony/symfony-cicd:dev
           #build-args: |
           #  BUILD_DATE=date
-        env:
-          GITHUB_SHA: ${GITHUB_SHA}
-
