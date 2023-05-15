@@ -30,5 +30,7 @@ RUN rm -rf /opt/kafka/bin/windows
 ## DEFINE VOLUMES
 VOLUME ["/opt/kafka/config", "/opt/kafka/kafka-logs"]
 
-## START KAFKA SERVICE
-ENTRYPOINT ["kafka-server-start.sh", "/opt/kafka/config/server.properties"]
+## START KAFKA SERVER
+ENTRYPOINT ["kafka-server-start.sh", "/opt/kafka/config/server.properties", \
+    "--override", "log.dirs=/opt/kafka/kafka-logs" \
+]

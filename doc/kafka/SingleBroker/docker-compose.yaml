@@ -16,7 +16,7 @@ services:
     container_name: kafka-client
     tty: true
     build:
-      context: client
+      context: server
     ports:
       - '9092:9092'
       - '9094:9094'

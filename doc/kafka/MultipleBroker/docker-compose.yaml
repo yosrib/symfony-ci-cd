@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    container_name: kafka-multiple-zookeeper
+    build:
+      context: ZooKeeper
+    ports:
+      - '2181:2181'
+    networks:
+      kafkanet:
+        ipv4_address: 10.6.0.2
+
+  kafka-1:
+    container_name: kafka-server-1
+    build:
+      context: server
+    command:
+      - --override
+      - broker.id=1
+      - --override
+      - zookeeper.connect=10.6.0.2:2181
+    ports:
+      - '9092:9092'
+    depends_on:
+      - zookeeper
+    networks:
+      kafkanet:
+        ipv4_address: 10.6.0.3
+
+  kafka-2:
+    container_name: kafka-server-2
+    build:
+      context: server
+    command:
+      - --override
+      - broker.id=2
+      - --override
+      - zookeeper.connect=10.6.0.2:2181
+    ports:
+      - '9093:9092'
+    depends_on:
+      - zookeeper
+    networks:
+      kafkanet:
+        ipv4_address: 10.6.0.4
+
+  kafka-3:
+    container_name: kafka-server-3
+    build:
+      context: server
+    command:
+      - --override
+      - broker.id=3
+      - --override
+      - zookeeper.connect=10.6.0.2:2181
+    ports:
+      - '9094:9092'
+    depends_on:
+      - zookeeper
+    networks:
+      kafkanet:
+        ipv4_address: 10.6.0.5
+
+networks:
+  kafkanet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.6.0.0/16
+          gateway: 10.6.0.1
