@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    container_name: kafka-zookeeper
+    tty: true
+    build:
+      context: ZooKeeper
+    ports:
+      - '2181:2181'
+    networks:
+      kafkanet:
+        ipv4_address: 10.5.0.2
+
+  kafka:
+    container_name: kafka-client
+    tty: true
+    build:
+      context: client
+    ports:
+      - '9092:9092'
+      - '9094:9094'
+    command:
+      - --override
+      - log.dirs=/opt/kafka/kafka-logs
+      - --override
+      - zookeeper.connect=10.5.0.2:2181
+    depends_on:
+      - zookeeper
+    networks:
+      kafkanet:
+        ipv4_address: 10.5.0.3
+
+networks:
+  kafkanet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
