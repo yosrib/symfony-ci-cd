@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.18 as builder
 
 ## INSTALL REQUIREMENTS
 RUN apk add --no-cache bash openjdk11-jre
@@ -12,25 +12,42 @@ RUN cp -R kafka_2.13-3.4.0 /opt/kafka/
 ## CLEAN
 RUN rm -rf kafka_2.13-3.4.0.tgz
 
-## EXPOSE PORTS
-EXPOSE 9092 9094
-
 WORKDIR /opt/kafka
 
 ## ADD KAFKA BINARY DIR TO PATH
 ENV PATH=/opt/kafka/bin:$PATH
 
+## DELETE WINDOWS CONF
+RUN rm -rf /opt/kafka/bin/windows
+
+FROM builder as server
+
 ## COPY KAFKA CONF
 RUN mkdir kafka-logs
 COPY zookeeper.properties ./config/
 
-## DELETE WINDOWS CONF
-RUN rm -rf /opt/kafka/bin/windows
-
 ## DEFINE VOLUMES
 VOLUME ["/opt/kafka/config", "/opt/kafka/kafka-logs"]
+
+## EXPOSE PORTS
+EXPOSE 9092
 
 ## START KAFKA SERVER
 ENTRYPOINT ["kafka-server-start.sh", "/opt/kafka/config/server.properties", \
     "--override", "log.dirs=/opt/kafka/kafka-logs" \
+]
+
+FROM builder as connect
+
+## COPY KAFKA CONNECT CONF
+COPY ./kafka-connect connect/
+
+## DEFINE VOLUMES
+VOLUME ["/opt/kafka/connect"]
+
+EXPOSE 8083
+
+ENTRYPOINT ["connect-standalone.sh", "./connect/kafka-connect-standalone.properties", \
+    "./connect/source-connect.properties", \
+    "./connect/sink-connect.properties" \
 ]

@@ -15,13 +15,12 @@ services:
     container_name: kafka-server-1
     build:
       context: server
+      target: server
     command:
       - --override
       - broker.id=1
       - --override
       - zookeeper.connect=10.6.0.2:2181
-    ports:
-      - '9092:9092'
     depends_on:
       - zookeeper
     networks:
@@ -32,13 +31,12 @@ services:
     container_name: kafka-server-2
     build:
       context: server
+      target: server
     command:
       - --override
       - broker.id=2
       - --override
       - zookeeper.connect=10.6.0.2:2181
-    ports:
-      - '9093:9092'
     depends_on:
       - zookeeper
     networks:
@@ -49,18 +47,34 @@ services:
     container_name: kafka-server-3
     build:
       context: server
+      target: server
     command:
       - --override
       - broker.id=3
       - --override
       - zookeeper.connect=10.6.0.2:2181
-    ports:
-      - '9094:9092'
     depends_on:
       - zookeeper
     networks:
       kafkanet:
         ipv4_address: 10.6.0.5
+
+  kafka-connect:
+    container_name: kafka-connect
+    volumes:
+      - './server/kafka-connect/stream.txt:/opt/kafka/connect/stream.txt:cached'
+      - './server/kafka-connect/stream-sink.txt:/opt/kafka/connect/stream-sink.txt:delegated'
+    build:
+      context: server
+      target: connect
+    depends_on:
+      - zookeeper
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    networks:
+      kafkanet:
+        ipv4_address: 10.6.0.6
 
 networks:
   kafkanet:
