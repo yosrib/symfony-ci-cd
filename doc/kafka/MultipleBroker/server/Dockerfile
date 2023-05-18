@@ -47,7 +47,9 @@ VOLUME ["/opt/kafka/connect"]
 
 EXPOSE 8083
 
-ENTRYPOINT ["connect-standalone.sh", "./connect/kafka-connect-standalone.properties", \
-    "./connect/source-connect.properties", \
-    "./connect/sink-connect.properties" \
+FROM connect as standalone
+
+ENTRYPOINT ["connect-standalone.sh", "./connect/standalone/json-schemas-convertor.properties", \
+    "./connect/connectors/FileStreamSource/source-connect.properties", \
+    "./connect/connectors/FileStreamSink/sink-connect.properties" \
 ]

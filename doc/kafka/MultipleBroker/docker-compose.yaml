@@ -61,9 +61,9 @@ services:
 
   kafka-connect:
     container_name: kafka-connect
+    tty: true
     volumes:
-      - './server/kafka-connect/stream.txt:/opt/kafka/connect/stream.txt:cached'
-      - './server/kafka-connect/stream-sink.txt:/opt/kafka/connect/stream-sink.txt:delegated'
+      - './server/kafka-connect:/opt/kafka/connect'
     build:
       context: server
       target: connect

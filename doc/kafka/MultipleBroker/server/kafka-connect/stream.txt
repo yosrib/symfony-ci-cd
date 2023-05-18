@@ -1,7 +1,0 @@
-test
-nouveau
-test
-sink
-entrypoint
-is
-active
