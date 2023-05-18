@@ -1,0 +1,2 @@
+Struct{firstName=John,lastName=}
+Struct{firstName=John,lastName=,topic=stream-text-connect}

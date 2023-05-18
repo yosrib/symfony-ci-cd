@@ -1,1 +1,1 @@
-{"schema": {"type": "struct", "optional": "false", "name": "users", "fields": [{"type": "string", "optional": "false", "name": "firstName"}, {"type": "string", "optional": "false", "name": "lastName"}]}, "payload": {"firstName": "John", "lastName": "Wick"}}
+{"schema": {"type": "struct", "optional": "false", "name": "users", "fields": [{"type": "string", "optional": "false", "field": "firstName"}, {"type": "string", "optional": "false", "field": "lastName"}]}, "payload": {"firstName": "John", "lastName": "Wick"}}
