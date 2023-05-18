@@ -40,6 +40,25 @@ kafka-topics.sh --list --bootstrap-server localhost:9092,localhost:9093,localhos
 kafka-topics.sh --describe --bootstrap-server localhost:9092,kafka-2:9092,kafka-3:9092 --topic TOPIC_NAME
 ```
 
+### Delete all messages
+Create json file `delete-all.config`
+```json
+{
+  "partitions": [
+    {
+      "topic": "TOPIC_NAME",
+      "partition": 0,
+      "offset": -1
+    }
+  ],
+  "version": 1
+}
+```
+```shell
+kafka-delete-records.sh --bootstrap-server kafka:9092 \
+  --offset-json-file delete-all.config
+```
+
 You can update `--replication-factor` value if you have multiple broker
 > The replication factor should be less or equal the number of broker<br>
 > If you have 3 brokers the --replication-factor should be 3 maximum
@@ -112,7 +131,6 @@ replace `--dry-run` with `--execute` to execute the reset offsets<br>
 ### Mode
 Standalone mode for development env<br>
 Distributed mode for production env<br>
-SMT : Simple Message Transform<br>
 [Kafka connect hub](https://confluent.io/hub)
 
 #### Standalone
@@ -136,4 +154,18 @@ connect-standalone.sh KAFKA_CONNECT_CONFIG SOURCE_CONNECTOR_CONFIG SINK_CONNECTO
 connect-standalone.sh ./connect/kafka-connect-standalone.properties \
   ./connect/source-connect.properties \
   ./connect/sink-connect.properties
+```
+### Transformer
+[SMT](https://docs.confluent.io/platform/current/connect/transforms/maskfield.html) : Simple Message Transform <br>
+Configure the transformer in source or sink connector.
+```properties
+transforms=TransformNameOne,TransformNameTwo
+
+# TransformNameOne: MaskField
+transforms.TransformNameOne.type=org.apache.kafka.connect.transforms.MaskField$Value
+transforms.TransformNameOne.fields=lastName
+# TransformNameTwo: InsertField
+transforms.TransformNameTwo.type=org.apache.kafka.connect.transforms.InsertField$Value
+transforms.TransformNameTwo.static.field=topic
+transforms.TransformNameTwo.static.value=stream-text-connect
 ```
