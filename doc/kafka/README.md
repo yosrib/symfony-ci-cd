@@ -1,3 +1,6 @@
+# Kafka
+https://kafka.apache.org/downloads
+
 
 ## Kafka console
 Inside the kafka container, you can create a topic, producer and consumer with the kafka shell scripts.
@@ -169,3 +172,17 @@ transforms.TransformNameTwo.type=org.apache.kafka.connect.transforms.InsertField
 transforms.TransformNameTwo.static.field=topic
 transforms.TransformNameTwo.static.value=stream-text-connect
 ```
+## Kafka Stream API
+Transform, copy messages from topic to another topic
+
+### Filter
+Filter message 
+
+### MapValue
+Transform message to a new message (One to one)
+
+### FlatMap
+Transform message to a many messages (One to many)
+
+### Foreach
+Transform list of messages into topic
